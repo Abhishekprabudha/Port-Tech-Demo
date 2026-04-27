@@ -50,9 +50,9 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--text-file", type=Path, default=DEFAULT_TEXT_FILE)
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT_FILE)
     parser.add_argument("--voice", default=DEFAULT_VOICE)
-    parser.add_argument("--rate", default="-2%", help="Speech rate for Edge TTS, e.g. -5%% or +0%%")
+    parser.add_argument("--rate", default="+8%", help="Speech rate for Edge TTS, e.g. -5%% or +0%%")
     parser.add_argument("--fallback-voice", default=DEFAULT_ESPEAK_VOICE)
-    parser.add_argument("--fallback-speed", type=int, default=145)
+    parser.add_argument("--fallback-speed", type=int, default=165)
     return parser.parse_args()
 
 

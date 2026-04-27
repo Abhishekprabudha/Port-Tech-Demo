@@ -21,12 +21,20 @@ jobs:
           sudo apt-get install -y ffmpeg
       - name: Render narrated MP4
         run: |
-          ffmpeg -y -stream_loop 5 -i assets/port-twin-agent-demo.webm \
-            -i assets/demo-narration.mp3 \
-            -map 0:v:0 -map 1:a:0 \
-            -c:v copy -c:a aac -b:a 160k \
+          VIDEO="assets/port-twin-agent-demo.webm"
+          AUDIO="assets/demo-narration.mp3"
+          OUTPUT="assets/port-twin-agent-demo-narrated.mp4"
+
+          SOURCE_DURATION=$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$VIDEO")
+          TRIMMED_DURATION=$(python -c 'import sys; source=float(sys.argv[1]); print(max(source - 1.0, source * 0.9))' "$SOURCE_DURATION")
+
+          ffmpeg -y -i "$VIDEO" -i "$AUDIO" \
+            -filter_complex "[0:v]crop=iw:ih-54:0:54,trim=duration=${TRIMMED_DURATION},setpts=PTS-STARTPTS[vtrim];[vtrim][vtrim]concat=n=2:v=1:a=0[vout]" \
+            -map "[vout]" -map 1:a:0 \
+            -c:v libx264 -preset medium -crf 18 \
+            -c:a aac -b:a 160k \
             -shortest -movflags +faststart \
-            assets/port-twin-agent-demo-narrated.mp4
+            "$OUTPUT"
       - name: Commit narrated MP4
         uses: stefanzweifel/git-auto-commit-action@v5
         with:

@@ -35,7 +35,7 @@
           </div>
           <div class="video-meta">
             <span>Inline</span>
-            <span>Looping</span>
+            <span>2 rounds max</span>
             <span>Repo MP3</span>
           </div>
         </div>
@@ -45,7 +45,6 @@
             id="demoVideo"
             class="demo-video"
             playsinline
-            loop
             preload="auto"
             muted
             controls
@@ -59,11 +58,11 @@
               <p class="overlay-tag">Interactive playback</p>
               <h3>Start narrated demo</h3>
               <p>
-                Click once to begin inline playback and start the narration MP3 stored in this repository. The demo and narration loop together for client viewing.
+                Click once to begin inline playback and start the narration MP3 stored in this repository. Playback now ends cleanly after two video rounds.
               </p>
               <button id="startButton" class="primary-btn">Play demo with narration</button>
               <p class="overlay-note">Browser note: autoplay with audio is blocked until user interaction.</p>
-              <audio id="narrationAudio" preload="auto" loop>
+              <audio id="narrationAudio" preload="auto">
                 <source src="assets/demo-narration.mp3" type="audio/mpeg" />
               </audio>
             </div>

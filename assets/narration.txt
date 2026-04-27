@@ -1,9 +1,7 @@
-AIonOS Port Twin Agent starts with the live vessel plan and converts it into an operational decision layer for the berth. The system reads vessel dimensions, berth window, quay position, crane availability, productivity targets, and safety constraints in one synchronized view.
+AIonOS Port Twin Agent turns the vessel plan into a live berth decision layer. It reads vessel size, berth window, quay position, crane readiness, and safety constraints in one view.
 
-As the vessel arrives, the agent calculates the most efficient berth position by checking usable quay length, draft limits, tidal and clearance rules, mooring boundaries, and planned yard flow. The objective is not just to park the vessel; it is to minimize crane travel, reduce truck congestion, and protect berth productivity.
+The agent places the vessel at the best berth position by checking usable quay length, draft limits, tidal clearance, and mooring boundaries. The goal is faster turnaround with less crane travel and less truck congestion.
 
-Next, the crane planning layer evaluates every crane that can safely serve the vessel. It checks reach, bay coverage, working radius, separation distance, workload balance, and interference risk. The agent then assigns cranes to bays so that moves are distributed intelligently and no crane blocks another crane’s operating envelope.
+Next, the crane planning layer evaluates reach, bay coverage, working radius, separation distance, and interference risk. It recommends crane-to-bay assignments that keep moves balanced and avoid operational conflict.
 
-The twin keeps recalculating as conditions change. If the berth start time shifts, if a crane becomes unavailable, or if a bay sequence changes, the agent compares alternatives and recommends a new crane and berth plan. Supervisors see the reason behind the recommendation, the operational impact, and the expected gain in berth throughput.
-
-What this creates is a control-tower view for marine operations. Instead of manually adjusting berth and crane plans in isolation, the port team gets a continuously optimized plan that connects vessel position, crane deployment, yard readiness, and real-time execution. AIonOS turns the port twin into an active operating agent for faster decisions, higher crane utilization, and more predictable vessel turnaround.
+If berth timing shifts or a crane becomes unavailable, the twin recalculates alternatives and proposes the best updated plan with clear impact for supervisors.
