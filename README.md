@@ -1,12 +1,12 @@
 # AIonOS Port Twin Agent Demo
 
-A static, client-shareable HTML repo for the supplied **AIonOS Port Twin Agent** video. The demo plays the uploaded port-twin WebM inline, syncs it with a pre-generated narration MP3, and includes a rendered narrated MP4 export.
+A static, client-shareable HTML repo for the supplied **AIonOS Port Twin Agent** video. The demo plays the uploaded port-twin WebM inline, syncs it with a pre-generated narration MP3, and includes a rendered narrated MP4 export clipped for clean playback.
 
 ## Files
 
 - `index.html` — main browser demo page
 - `styles.css` — visual styling for the AIonOS port-twin experience
-- `script.js` — playback logic, narration sync, cue captions, loop behaviour
+- `script.js` — playback logic, narration sync, cue captions, and two-round stop behaviour
 - `assets/port-twin-agent-demo.webm` — original uploaded demo video
 - `assets/narration.txt` — single-source narration script
 - `assets/demo-narration.mp3` — generated narration audio
@@ -30,7 +30,7 @@ The narration explains how the AIonOS Port Twin Agent calculates berth position 
 1. Upload the full folder to GitHub Pages, Netlify, Vercel, or any static web server.
 2. Open `index.html` through the hosted URL.
 3. Click **Play demo with narration** once.
-4. The video and narration will play inline and loop together.
+4. The video plays inline and stops cleanly after two rounds.
 
 ## Regenerate narration MP3
 
@@ -48,10 +48,14 @@ If Edge TTS is unavailable locally, the script falls back to `espeak` + `ffmpeg`
 Run locally:
 
 ```bash
-ffmpeg -y -stream_loop 5 -i assets/port-twin-agent-demo.webm \
-  -i assets/demo-narration.mp3 \
-  -map 0:v:0 -map 1:a:0 \
-  -c:v copy -c:a aac -b:a 160k \
+SOURCE_DURATION=$(ffprobe -v error -show_entries format=duration -of csv=p=0 assets/port-twin-agent-demo.webm)
+TRIMMED_DURATION=$(python -c 'import sys; s=float(sys.argv[1]); print(max(s-1.0, s*0.9))' "$SOURCE_DURATION")
+
+ffmpeg -y -i assets/port-twin-agent-demo.webm -i assets/demo-narration.mp3 \
+  -filter_complex "[0:v]crop=iw:ih-54:0:54,trim=duration=${TRIMMED_DURATION},setpts=PTS-STARTPTS[vtrim];[vtrim][vtrim]concat=n=2:v=1:a=0[vout]" \
+  -map "[vout]" -map 1:a:0 \
+  -c:v libx264 -preset medium -crf 18 \
+  -c:a aac -b:a 160k \
   -shortest -movflags +faststart \
   assets/port-twin-agent-demo-narrated.mp4
 ```

@@ -9,45 +9,38 @@ const captionText = document.getElementById('captionText');
 const voiceStatus = document.getElementById('voiceStatus');
 const pulseDot = document.getElementById('pulseDot');
 
+const MAX_VIDEO_ROUNDS = 2;
+
 const narrationCues = [
   {
     start: 0,
-    end: 18,
-    caption: 'AIonOS starts with the live vessel plan and converts it into an operational decision layer for the berth.',
+    end: 14,
+    caption: 'AIonOS ingests the vessel plan and opens a berth decision layer for the shift supervisor.',
   },
   {
-    start: 18,
-    end: 39,
-    caption: 'The agent calculates berth position using quay length, draft limits, tidal clearance, mooring boundaries, berth window, and yard-flow constraints.',
+    start: 14,
+    end: 29,
+    caption: 'The agent places the vessel using quay length, draft, tidal clearance, mooring limits, and yard-flow timing.',
   },
   {
-    start: 39,
-    end: 62,
-    caption: 'The objective is not only to park the vessel; it is to reduce crane travel, truck congestion, and berth productivity risk.',
+    start: 29,
+    end: 44,
+    caption: 'Crane assignment is validated against reach, bay coverage, crane separation, and interference risk.',
   },
   {
-    start: 62,
-    end: 84,
-    caption: 'The crane planning layer evaluates reach, bay coverage, working radius, separation distance, workload balance, and interference risk.',
-  },
-  {
-    start: 84,
-    end: 103,
-    caption: 'When berth timing, crane availability, or bay sequence changes, the twin recalculates alternatives and recommends a revised plan.',
-  },
-  {
-    start: 103,
-    end: 123,
-    caption: 'The result is a control-tower view connecting vessel position, crane deployment, yard readiness, and real-time execution.',
+    start: 44,
+    end: 58,
+    caption: 'When timing or crane availability changes, the twin recalculates and recommends the best updated plan.',
   },
 ];
 
 let currentCueIndex = -1;
 let narrationEnabled = true;
 let userStarted = false;
+let completedVideoRounds = 0;
 
 function updateCue(force = false) {
-  const time = narrationAudio.currentTime || video.currentTime;
+  const time = narrationEnabled ? narrationAudio.currentTime : video.currentTime;
   const nextIndex = narrationCues.findIndex(cue => time >= cue.start && time < cue.end);
 
   if (nextIndex === -1) return;
@@ -68,9 +61,18 @@ function syncVideoToNarration() {
   }
 }
 
+function stopExperience() {
+  video.pause();
+  narrationAudio.pause();
+  voiceStatus.textContent = `Narration status: completed after ${MAX_VIDEO_ROUNDS} video rounds`;
+  captionText.textContent = 'Demo complete. Click replay to run the shortened walkthrough again.';
+  pulseDot.style.background = '#8796ac';
+}
+
 async function startExperience() {
   userStarted = true;
   startOverlay.classList.add('hidden');
+  completedVideoRounds = 0;
 
   narrationAudio.currentTime = 0;
   video.currentTime = 0;
@@ -87,6 +89,7 @@ async function startExperience() {
 
 async function replayNarration() {
   currentCueIndex = -1;
+  completedVideoRounds = 0;
   narrationAudio.currentTime = 0;
   video.currentTime = 0;
 
@@ -137,8 +140,20 @@ narrationAudio.addEventListener('timeupdate', () => {
 
 narrationAudio.addEventListener('ended', () => {
   if (!userStarted || !narrationEnabled) return;
-  narrationAudio.currentTime = 0;
-  narrationAudio.play().catch(() => {});
+  voiceStatus.textContent = 'Narration status: completed';
+});
+
+video.addEventListener('ended', () => {
+  if (!userStarted) return;
+
+  completedVideoRounds += 1;
+  if (completedVideoRounds >= MAX_VIDEO_ROUNDS) {
+    stopExperience();
+    return;
+  }
+
+  video.currentTime = 0;
+  video.play().catch(() => {});
 });
 
 video.addEventListener('timeupdate', () => {
