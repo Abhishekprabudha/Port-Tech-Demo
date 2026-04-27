@@ -1,1 +1,32 @@
+name: Generate narration audio
 
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'assets/narration.txt'
+      - 'scripts/generate_narration.py'
+
+permissions:
+  contents: write
+
+jobs:
+  generate-narration:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y espeak ffmpeg
+          pip install edge-tts
+      - name: Generate MP3
+        run: python scripts/generate_narration.py
+      - name: Commit generated audio
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: Regenerate port twin narration audio
+          file_pattern: assets/demo-narration.mp3
