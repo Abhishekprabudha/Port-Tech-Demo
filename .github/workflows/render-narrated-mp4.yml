@@ -29,7 +29,7 @@ jobs:
           TRIMMED_DURATION=$(python -c 'import sys; source=float(sys.argv[1]); print(max(source - 1.0, source * 0.9))' "$SOURCE_DURATION")
 
           ffmpeg -y -i "$VIDEO" -i "$AUDIO" \
-            -filter_complex "[0:v]crop=iw:ih-54:0:54,trim=duration=${TRIMMED_DURATION},setpts=PTS-STARTPTS[vtrim];[vtrim][vtrim]concat=n=2:v=1:a=0[vout]" \
+            -filter_complex "[0:v]crop=iw:ih-54:0:54,trim=duration=${TRIMMED_DURATION},setpts=PTS-STARTPTS[vtrim];[vtrim]split=2[vtrim1][vtrim2];[vtrim1][vtrim2]concat=n=2:v=1:a=0[vout]" \
             -map "[vout]" -map 1:a:0 \
             -c:v libx264 -preset medium -crf 18 \
             -c:a aac -b:a 160k \
