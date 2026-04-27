@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AIonOS | Port Twin Agent Demo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="page-shell">
+    <div class="background-glow glow-one"></div>
+    <div class="background-glow glow-two"></div>
+    <div class="grid-overlay"></div>
+
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">Client-shareable HTML demo</p>
+        <h1>AIonOS Port Twin Agent</h1>
+        <p class="subtext">
+          Narrated walkthrough showing how berth position and crane allocation are calculated using vessel constraints, quay rules, crane reach, bay coverage, and real-time operational changes.
+        </p>
+      </div>
+      <div class="status-pill" id="voiceStatus">Narration status: loading repo MP3</div>
+    </header>
+
+    <main class="hero-grid">
+      <section class="video-panel glass-card">
+        <div class="video-header">
+          <div>
+            <p class="section-tag">Demo playback</p>
+            <h2>Berth and crane optimization walkthrough</h2>
+          </div>
+          <div class="video-meta">
+            <span>Inline</span>
+            <span>Looping</span>
+            <span>Repo MP3</span>
+          </div>
+        </div>
+
+        <div class="video-wrapper" id="videoWrapper">
+          <video
+            id="demoVideo"
+            class="demo-video"
+            playsinline
+            loop
+            preload="auto"
+            muted
+            controls
+          >
+            <source src="assets/port-twin-agent-demo.webm" type="video/webm" />
+            Your browser does not support the video tag.
+          </video>
+
+          <div class="start-overlay" id="startOverlay">
+            <div class="overlay-card">
+              <p class="overlay-tag">Interactive playback</p>
+              <h3>Start narrated demo</h3>
+              <p>
+                Click once to begin inline playback and start the narration MP3 stored in this repository. The demo and narration loop together for client viewing.
+              </p>
+              <button id="startButton" class="primary-btn">Play demo with narration</button>
+              <p class="overlay-note">Browser note: autoplay with audio is blocked until user interaction.</p>
+              <audio id="narrationAudio" preload="auto" loop>
+                <source src="assets/demo-narration.mp3" type="audio/mpeg" />
+              </audio>
+            </div>
+          </div>
+
+          <div class="caption-band">
+            <div>
+              <p class="caption-label">Live narration cue</p>
+              <p id="captionText" class="caption-text">Ready to begin the narrated port twin walkthrough.</p>
+            </div>
+            <div class="pulse-dot" id="pulseDot"></div>
+          </div>
+        </div>
+
+        <div class="control-row">
+          <button id="replayButton" class="secondary-btn">Replay narration</button>
+          <button id="toggleNarrationButton" class="secondary-btn">Pause narration</button>
+          <button id="toggleVideoMuteButton" class="secondary-btn">Keep video muted</button>
+        </div>
+      </section>
+
+      <aside class="info-panel glass-card">
+        <p class="section-tag">Narrative focus</p>
+        <h2>What the client sees</h2>
+        <ul class="feature-list">
+          <li><span>01</span> Vessel plan converted into a live berth decision layer.</li>
+          <li><span>02</span> Berth position calculated against quay length, draft, clearance, mooring, and yard-flow constraints.</li>
+          <li><span>03</span> Crane assignments validated against reach, bay coverage, working radius, separation, and interference risk.</li>
+          <li><span>04</span> Dynamic replanning when berth start, crane availability, or bay sequence changes.</li>
+          <li><span>05</span> Supervisor view with recommendation rationale, operational impact, and expected throughput gain.</li>
+        </ul>
+
+        <div class="metric-grid">
+          <div>
+            <p>Decision layer</p>
+            <strong>Berth + crane</strong>
+          </div>
+          <div>
+            <p>Optimization target</p>
+            <strong>Turnaround</strong>
+          </div>
+          <div>
+            <p>Operating mode</p>
+            <strong>Continuous twin</strong>
+          </div>
+          <div>
+            <p>Output</p>
+            <strong>Action plan</strong>
+          </div>
+        </div>
+
+        <div class="callout-box">
+          <p class="callout-label">Hosting note</p>
+          <p>This repo is fully static. Upload the folder contents to GitHub Pages, Netlify, Vercel, or any basic web host.</p>
+        </div>
+      </aside>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
