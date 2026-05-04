@@ -52,7 +52,7 @@ SOURCE_DURATION=$(ffprobe -v error -show_entries format=duration -of csv=p=0 ass
 TRIMMED_DURATION=$(python -c 'import sys; s=float(sys.argv[1]); print(max(s-1.0, s*0.9))' "$SOURCE_DURATION")
 
 ffmpeg -y -i assets/port-twin-agent-demo.webm -i assets/demo-narration.mp3 \
-  -filter_complex "[0:v]crop=iw:ih-54:0:54,trim=duration=${TRIMMED_DURATION},setpts=PTS-STARTPTS[vtrim];[vtrim][vtrim]concat=n=2:v=1:a=0[vout]" \
+  -filter_complex "[0:v]crop=iw:ih-189:0:189,trim=duration=${TRIMMED_DURATION},setpts=PTS-STARTPTS[vtrim];[vtrim][vtrim]concat=n=2:v=1:a=0[vout]" \
   -map "[vout]" -map 1:a:0 \
   -c:v libx264 -preset medium -crf 18 \
   -c:a aac -b:a 160k \
